@@ -80,6 +80,6 @@ const { createInterviewExperience } = require("../controllers/interviewExperienc
  *         description: Server error
  */
 
-router.post("/api/interviewExperience", createInterviewExperience);
+router.post("/", createInterviewExperience);
 
 module.exports = router;

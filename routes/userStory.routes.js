@@ -74,6 +74,6 @@ const { updateUserStory } = require("../controllers/userStory.controller");
  *         description: Server error
  */
 
-router.patch("/api/userStory/:id", updateUserStory);
+router.patch("/:id", updateUserStory);
 
 module.exports = router;
