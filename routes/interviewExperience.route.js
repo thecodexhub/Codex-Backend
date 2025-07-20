@@ -33,7 +33,6 @@ const {
  *           type: string
  *         year:
  *           type: string
- *           enum: [FY, SY, TY, LY]
  *         dept:
  *           type: string
  *           enum: [COMPUTER, IT, AIDS, CSD, ROBOSTICS, ENTC, OTHER]
@@ -76,7 +75,6 @@ const {
  *                 type: string
  *               year:
  *                 type: string
- *                 enum: [FY, SY, TY, LY]
  *               dept:
  *                 type: string
  *                 enum: [COMPUTER, IT, AIDS, CSD, ROBOSTICS, ENTC, OTHER]

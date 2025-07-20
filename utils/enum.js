@@ -5,7 +5,7 @@ const DepartmentEnum = [
   "IT",
   "AIDS",
   "CSD",
-  "ROBOSTICS",
+  "ROBOTICS",
   "ENTC",
   "OTHER",
 ];
