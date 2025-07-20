@@ -1,13 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const { createInterviewExperience } = require("../controllers/interviewExperience.controller");
+const {
+  createInterviewExperience,
+  getAllInterviewExperiences,
+} = require("../controllers/interviewExperience.controller");
 
 /**
  * @swagger
  * tags:
  *   name: InterviewExperience
  *   description: APIs for managing interview experiences
- *
+ */
+
+/**
+ * @swagger
  * components:
  *   schemas:
  *     Round:
@@ -38,11 +44,11 @@ const { createInterviewExperience } = require("../controllers/interviewExperienc
  *         isInternshipOrTrainingProvided:
  *           type: boolean
  *         internshipPeriodInMonths:
- *           type: number
+ *           type: string    # ← Returned as formatted string in GET
  *         numberOfRounds:
  *           type: number
  *         ctcOffered:
- *           type: number
+ *           type: string    # ← Returned as formatted string in GET
  *         rounds:
  *           type: array
  *           items:
@@ -64,7 +70,36 @@ const { createInterviewExperience } = require("../controllers/interviewExperienc
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/InterviewExperience'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               year:
+ *                 type: string
+ *                 enum: [FY, SY, TY, LY]
+ *               dept:
+ *                 type: string
+ *                 enum: [COMPUTER, IT, AIDS, CSD, ROBOSTICS, ENTC, OTHER]
+ *               companyName:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *               isInternshipOrTrainingProvided:
+ *                 type: boolean
+ *               internshipPeriodInMonths:
+ *                 type: number
+ *               numberOfRounds:
+ *                 type: number
+ *               ctcOffered:
+ *                 type: number
+ *               rounds:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/Round'
+ *               linkedinUrl:
+ *                 type: string
+ *               eligibilityCriteria:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Interview experience saved successfully
@@ -76,10 +111,28 @@ const { createInterviewExperience } = require("../controllers/interviewExperienc
  *                 message:
  *                   type: string
  *                   example: Interview experience saved successfully
+ *                 id:
+ *                   type: string
+ *       500:
+ *         description: Server error
+ *
+ *   get:
+ *     summary: Get all interview experiences
+ *     tags: [InterviewExperience]
+ *     responses:
+ *       200:
+ *         description: List of all interview experiences
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/InterviewExperience'
  *       500:
  *         description: Server error
  */
 
 router.post("/", createInterviewExperience);
+router.get("/", getAllInterviewExperiences);
 
 module.exports = router;

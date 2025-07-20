@@ -14,3 +14,12 @@ exports.createInterviewExperience = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.getAllInterviewExperiences = async (req, res) => {
+  try {
+    const experiences = await InterviewExperience.find();
+    res.status(200).json(experiences);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
