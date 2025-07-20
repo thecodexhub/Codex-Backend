@@ -30,8 +30,16 @@ const { signup, login } = require("../controllers/auth.controller");
  *     responses:
  *       201:
  *         description: User registered
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token: { type: string }
+ *                 userId: { type: string }
+ *                 message: { type: string }
  *       400:
- *         description: User exists
+ *         description: User already exists
  */
 router.post("/signup", signup);
 
@@ -54,8 +62,18 @@ router.post("/signup", signup);
  *     responses:
  *       200:
  *         description: Login success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token: { type: string }
+ *                 userId: { type: string }
+ *                 message: { type: string }
  *       400:
  *         description: Invalid credentials
+ *       404:
+ *         description: User not found
  */
 router.post("/login", login);
 

@@ -20,7 +20,7 @@ exports.signup = async (req, res) => {
       expiresIn: process.env.JWT_EXPIRY,
     });
 
-    res.status(201).json({ token, userId: user._id });
+    res.status(201).json({ token, userId: user._id, message: "Signup successful" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
       expiresIn: process.env.JWT_EXPIRY,
     });
 
-    res.status(200).json({ token, userId: user._id });
+    res.status(200).json({ token, userId: user._id, message: "Login successful" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

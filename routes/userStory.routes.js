@@ -10,10 +10,18 @@ const { updateUserStory } = require("../controllers/userStory.controller");
  *
  * components:
  *   schemas:
+ *     DepartmentEnum:
+ *       type: string
+ *       enum: [COMPUTER, IT, AIDS, CSD, ROBOSTICS, ENTC, OTHER]
+
  *     YearEnum:
  *       type: string
  *       enum: [FY, SY, TY, LY]
- *
+
+ *     CodingEnum:
+ *       type: string
+ *       enum: [COMPLETELY_NEW, JUST_STARTING, BASIC_CODING, EXPERIENCED]
+
  *     UpdateUserStory:
  *       type: object
  *       properties:
@@ -22,11 +30,11 @@ const { updateUserStory } = require("../controllers/userStory.controller");
  *         lastName:
  *           type: string
  *         department:
- *           type: string
+ *           $ref: '#/components/schemas/DepartmentEnum'
  *         year:
  *           $ref: '#/components/schemas/YearEnum'
  *         codingSoFar:
- *           type: string
+ *           $ref: '#/components/schemas/CodingEnum'
  */
 
 /**
