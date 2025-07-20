@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { DepartmentEnum, YearEnum } = require("../utils/enum");
+const { DepartmentEnum } = require("../utils/enum");
 const { createInterviewDBConnection } = require("../config/db");
 
 const interviewDB = createInterviewDBConnection();
@@ -12,11 +12,7 @@ const RoundSchema = new mongoose.Schema({
 
 const InterviewExperienceSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  year: {
-    type: String,
-    enum: YearEnum,
-    required: true,
-  },
+  year: { type: String },
   dept: {
     type: String,
     enum: DepartmentEnum,
