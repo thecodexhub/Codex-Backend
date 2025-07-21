@@ -5,6 +5,7 @@ const { connectDB } = require("./config/db");
 const authRoutes = require("./routes/auth.routes");
 const storyRoutes = require("./routes/userStory.routes");
 const interviewExperienceRoutes = require("./routes/interviewExperience.route");
+const companyRoutes = require("./routes/company.routes");
 const setupSwagger = require("./swagger/swagger");
 
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/user-story", storyRoutes);
 app.use("/api/interviewExperience", interviewExperienceRoutes);
+app.use("/api/company", companyRoutes);
 
 setupSwagger(app);
 
