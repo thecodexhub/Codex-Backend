@@ -23,3 +23,18 @@ exports.getAllInterviewExperiences = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.deleteAllInterviewExperiences = async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    if (password !== "codex") {
+      return res.status(403).json({ message: "Unauthorized: Invalid password" });
+    }
+
+    await InterviewExperience.deleteMany({});
+    res.status(200).json({ message: "All interview experiences have been deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   createInterviewExperience,
   getAllInterviewExperiences,
+  deleteAllInterviewExperiences,
 } = require("../controllers/interviewExperience.controller");
 
 /**
@@ -132,5 +133,45 @@ const {
 
 router.post("/", createInterviewExperience);
 router.get("/", getAllInterviewExperiences);
+
+/**
+ * @swagger
+ * /api/interviewExperience/delete-all:
+ *   delete:
+ *     summary: Delete all interview experiences
+ *     tags: [InterviewExperience]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 example: codex
+ *     responses:
+ *       200:
+ *         description: All interview experiences deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       403:
+ *         description: Invalid password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Server error
+ */
+router.delete("/delete-all", deleteAllInterviewExperiences);  // Make sure this line exists
 
 module.exports = router;
