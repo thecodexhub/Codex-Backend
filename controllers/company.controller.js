@@ -76,4 +76,23 @@ const bulkAddCompanies = async (req, res) => {
   });
 };
 
-module.exports = { searchCompanies, addCompany, bulkAddCompanies };
+/**
+ * @desc Get all companies (limited to 1000 for safety)
+ */
+const getAllCompanies = async (req, res) => {
+  try {
+    const companies = await Company.find({}, "name").limit(1000); // Select only 'name' field
+    const names = companies.map((c) => c.name); // Extract name field
+    res.status(200).json(names);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch companies" });
+  }
+};
+
+module.exports = {
+  searchCompanies,
+  addCompany,
+  bulkAddCompanies,
+  getAllCompanies, // ⬅️ Export it
+};
+

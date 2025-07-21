@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { searchCompanies, addCompany, bulkAddCompanies } = require("../controllers/company.controller");
+const {
+  searchCompanies,
+  addCompany,
+  bulkAddCompanies,
+  getAllCompanies,
+} = require("../controllers/company.controller");
+
 
 /**
  * @swagger
@@ -29,6 +35,27 @@ const { searchCompanies, addCompany, bulkAddCompanies } = require("../controller
  *         description: Server error
  */
 router.get("/search", searchCompanies);
+
+/**
+ * @swagger
+ * /api/company/all:
+ *   get:
+ *     summary: Get all company names
+ *     tags: [Company]
+ *     responses:
+ *       200:
+ *         description: Array of company names
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ *                 example: BOSLEO, DESEX, MICROSOFT
+ *       500:
+ *         description: Server error
+ */
+router.get("/all", getAllCompanies);
 
 /**
  * @swagger
