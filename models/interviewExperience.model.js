@@ -18,6 +18,11 @@ const InterviewExperienceSchema = new mongoose.Schema({
     enum: DepartmentEnum,
     required: true,
   },
+  companyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Company",
+    required: true,
+  },
   companyName: { type: String },
   role: { type: String },
   isInternshipOrTrainingProvided: { type: Boolean },

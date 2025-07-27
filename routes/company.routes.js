@@ -7,7 +7,6 @@ const {
   getAllCompanies,
 } = require("../controllers/company.controller");
 
-
 /**
  * @swagger
  * tags:
@@ -40,20 +39,47 @@ router.get("/search", searchCompanies);
  * @swagger
  * /api/company/all:
  *   get:
- *     summary: Get all company names
+ *     summary: Get paginated list of companies with optional search
  *     tags: [Company]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         required: false
+ *         description: Page number (9 companies per page)
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Optional text to filter company names (partial match)
  *     responses:
  *       200:
- *         description: Array of company names
+ *         description: Paginated and filtered list of companies
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: string
- *                 example: BOSLEO, DESEX, MICROSOFT
- *       500:
- *         description: Server error
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       company_logo:
+ *                         type: string
+ *                 currentPage:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 totalCompanies:
+ *                   type: integer
  */
 router.get("/all", getAllCompanies);
 
@@ -90,7 +116,7 @@ router.post("/add", addCompany);
  * @swagger
  * /api/company/bulk-add:
  *   post:
- *     summary: Bulk upload company names
+ *     summary: Bulk upload companies with logo
  *     tags: [Company]
  *     requestBody:
  *       required: true
@@ -99,31 +125,25 @@ router.post("/add", addCompany);
  *           schema:
  *             type: object
  *             required:
- *               - names
+ *               - companies
  *             properties:
- *               names:
+ *               companies:
  *                 type: array
  *                 items:
- *                   type: string
- *                 example: ["BOSLEO", "DESEX", "MICROSOFT"]
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     company_logo:
+ *                       type: string
+ *                 example:
+ *                   - name: BOSLEO
+ *                     company_logo: https://logo.com/bosleo.png
+ *                   - name: MICROSOFT
+ *                     company_logo: https://logo.com/ms.png
  *     responses:
  *       201:
  *         description: List of companies added and skipped
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 inserted:
- *                   type: array
- *                   items:
- *                     type: string
- *                 skipped:
- *                   type: array
- *                   items:
- *                     type: string
- *                 message:
- *                   type: string
  *       400:
  *         description: Invalid input
  *       500:

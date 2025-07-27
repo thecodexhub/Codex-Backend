@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { DepartmentEnum, YearEnum, CodingEnum } = require("../utils/enum");
 
 const userSchema = new mongoose.Schema({
+  uid: { type: String, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   name: {

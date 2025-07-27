@@ -32,7 +32,7 @@ const addCompany = async (req, res) => {
       return res.status(201).json(newCompany);
     }
 
-    return res.status(200).json(existing); // return existing if found
+    return res.status(200).json(existing);
   } catch (err) {
     return res.status(500).json({ error: "Error adding company" });
   }
@@ -42,30 +42,38 @@ const addCompany = async (req, res) => {
  * @desc Bulk upload companies (deduplicated)
  */
 const bulkAddCompanies = async (req, res) => {
-  const { names } = req.body;
+  const { companies } = req.body;
 
-  if (!Array.isArray(names) || names.length === 0) {
-    return res.status(400).json({ error: "Provide a non-empty array of company names" });
+  if (!Array.isArray(companies) || companies.length === 0) {
+    return res.status(400).json({ error: "Provide a non-empty array of companies" });
   }
 
   const inserted = [];
   const skipped = [];
 
-  for (const name of names) {
-    if (!name || typeof name !== 'string') continue;
+  for (const company of companies) {
+    const { name, company_logo } = company;
+
+    if (!name || typeof name !== "string") {
+      skipped.push(company);
+      continue;
+    }
 
     const exists = await Company.findOne({ name: { $regex: `^${name}$`, $options: "i" } });
 
     if (!exists) {
       try {
-        const newCompany = new Company({ name: name.trim() });
+        const newCompany = new Company({
+          name: name.trim(),
+          company_logo: company_logo?.trim() || "",
+        });
         await newCompany.save();
-        inserted.push(newCompany.name);
+        inserted.push({ name: newCompany.name, company_logo: newCompany.company_logo });
       } catch (err) {
-        skipped.push(name); // If insertion fails (e.g., unique index race)
+        skipped.push(company);
       }
     } else {
-      skipped.push(name);
+      skipped.push(company);
     }
   }
 
@@ -76,14 +84,33 @@ const bulkAddCompanies = async (req, res) => {
   });
 };
 
+
 /**
- * @desc Get all companies (limited to 1000 for safety)
+ * @desc Get paginated list of companies with optional search
  */
 const getAllCompanies = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 9;
+  const skip = (page - 1) * limit;
+  const search = req.query.search?.trim();
+
+  const query = search
+    ? { name: { $regex: search, $options: "i" } } // partial case-insensitive match
+    : {};
+
   try {
-    const companies = await Company.find({}, "name").limit(1000); // Select only 'name' field
-    const names = companies.map((c) => c.name); // Extract name field
-    res.status(200).json(names);
+    const companies = await Company.find(query, "_id name company_logo")
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Company.countDocuments(query);
+
+    res.status(200).json({
+      data: companies,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalCompanies: total,
+    });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch companies" });
   }
@@ -93,6 +120,5 @@ module.exports = {
   searchCompanies,
   addCompany,
   bulkAddCompanies,
-  getAllCompanies, // ⬅️ Export it
+  getAllCompanies,
 };
-

@@ -3,13 +3,20 @@ const InterviewExperience = require("../models/interviewExperience.model");
 exports.createInterviewExperience = async (req, res) => {
   try {
     const data = req.body;
-    
+
+    if (!data.companyId) {
+      return res.status(400).json({ message: "Company ID is required" });
+    }
+
     data.ctcOffered = `${data.ctcOffered} LPA`;
     data.internshipPeriodInMonths = `${data.internshipPeriodInMonths} Months`;
 
     const experience = await InterviewExperience.create(data);
 
-    res.status(201).json({ message: "Interview experience saved successfully", id: experience._id });
+    res.status(201).json({
+      message: "Interview experience saved successfully",
+      id: experience._id,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -17,8 +24,30 @@ exports.createInterviewExperience = async (req, res) => {
 
 exports.getAllInterviewExperiences = async (req, res) => {
   try {
-    const experiences = await InterviewExperience.find();
+    const { companyId } = req.query;
+
+    const filter = {};
+    if (companyId) {
+      filter.companyId = companyId;
+    }
+
+    const experiences = await InterviewExperience.find(filter);
     res.status(200).json(experiences);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getInterviewExperienceById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const experience = await InterviewExperience.findById(id);
+    if (!experience) {
+      return res.status(404).json({ message: "Experience not found" });
+    }
+
+    res.status(200).json(experience);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

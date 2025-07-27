@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { updateUserStory } = require("../controllers/userStory.controller");
+const { updateUserStory, createOrFindUser } = require("../controllers/userStory.controller");
 
 /**
  * @swagger
@@ -25,6 +25,9 @@ const { updateUserStory } = require("../controllers/userStory.controller");
  *     UpdateUserStory:
  *       type: object
  *       properties:
+ *         uid:
+ *           type: string
+ *           description: Firebase UID or authentication ID
  *         firstName:
  *           type: string
  *         lastName:
@@ -39,6 +42,48 @@ const { updateUserStory } = require("../controllers/userStory.controller");
 
 /**
  * @swagger
+ * /api/userStory:
+ *   post:
+ *     summary: Create or find a user by uid and email
+ *     tags: [UserStory]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - uid
+ *               - email
+ *             properties:
+ *               uid:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User found or created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 isNewUser:
+ *                   type: boolean
+ *                 _id:
+ *                   type: string
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Server error
+ */
+
+router.post("/", createOrFindUser);
+
+/**
+ * @swagger
  * /api/userStory/{id}:
  *   patch:
  *     summary: Update a user story
@@ -49,7 +94,7 @@ const { updateUserStory } = require("../controllers/userStory.controller");
  *         schema:
  *           type: string
  *         required: true
- *         description: The user ID
+ *         description: The user MongoDB document ID
  *     requestBody:
  *       required: true
  *       content:

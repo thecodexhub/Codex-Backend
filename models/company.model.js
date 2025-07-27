@@ -10,6 +10,11 @@ const CompanySchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+  company_logo: {
+    type: String,
+    trim: true,
+    default: "",
+  },
 });
 
 const Company = companyDB.model("Company", CompanySchema);
