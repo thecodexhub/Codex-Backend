@@ -18,7 +18,7 @@ app.use(cors()); // ← Enable CORS for all routes and origins
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/user-story", storyRoutes);
+app.use("/api/userStory", storyRoutes);
 app.use("/api/interviewExperience", interviewExperienceRoutes);
 app.use("/api/company", companyRoutes);
 
