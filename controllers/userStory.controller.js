@@ -39,6 +39,7 @@ exports.updateUserStory = async (req, res) => {
 
 exports.createOrFindUser = async (req, res) => {
   try {
+
     const { uid, email } = req.body;
 
     if (!uid || !email) {
@@ -48,27 +49,16 @@ exports.createOrFindUser = async (req, res) => {
     let user = await User.findOne({ uid, email });
 
     if (user) {
-      return res.status(200).json({
-        success: true,
-        isNewUser: false,
-        _id: user._id,
-      });
+      return res.status(200).json({ success: true, isNewUser: false, _id: user._id });
     }
 
-    user = new User({
-      uid,
-      email,
-    });
-
+    user = new User({ uid, email });
     await user.save();
 
-    return res.status(200).json({
-      success: true,
-      isNewUser: true,
-      _id: user._id,
-    });
+    return res.status(200).json({ success: true, isNewUser: true, _id: user._id });
+
   } catch (error) {
-    console.error("Error in createOrFindUser:", error);
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+

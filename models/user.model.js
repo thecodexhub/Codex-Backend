@@ -3,11 +3,11 @@ const { DepartmentEnum, YearEnum, CodingEnum } = require("../utils/enum");
 
 const userSchema = new mongoose.Schema({
   uid: { type: String, unique: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  email: { type: String, unique: true },
+  password: { type: String },
   name: {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
   },
   department: {
     type: String,
