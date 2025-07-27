@@ -79,7 +79,7 @@ router.post("/", createInterviewExperience);
 
 /**
  * @swagger
- * /api/interview-experience:
+ * /api/interviewExperience:
  *   get:
  *     summary: Get all interview experiences
  *     tags: [InterviewExperience]
@@ -104,7 +104,7 @@ router.get("/", getAllInterviewExperiences);
 
 /**
  * @swagger
- * /api/interview-experience/{id}:
+ * /api/interviewExperience/{id}:
  *   get:
  *     summary: Get a single interview experience by ID
  *     tags: [InterviewExperience]
