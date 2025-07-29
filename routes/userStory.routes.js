@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { updateUserStory, createOrFindUser } = require("../controllers/userStory.controller");
+const { updateUserStory, createOrFindUser, deleteAllUsers, getAllUsers } = require("../controllers/userStory.controller");
 
 /**
  * @swagger
@@ -79,7 +79,6 @@ const { updateUserStory, createOrFindUser } = require("../controllers/userStory.
  *       500:
  *         description: Server error
  */
-
 router.post("/", createOrFindUser);
 
 /**
@@ -118,7 +117,61 @@ router.post("/", createOrFindUser);
  *       500:
  *         description: Server error
  */
-
 router.patch("/:id", updateUserStory);
+
+/**
+ * @swagger
+ * /api/userStory:
+ *   get:
+ *     summary: Get all users
+ *     tags: [UserStory]
+ *     responses:
+ *       200:
+ *         description: List of all users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 count:
+ *                   type: integer
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/UpdateUserStory'
+ *       500:
+ *         description: Server error
+ */
+router.get("/", getAllUsers);
+
+/**
+ * @swagger
+ * /api/userStory/delete-all:
+ *   delete:
+ *     summary: Delete all Users
+ *     tags: [UserStory]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 example: codex
+ *     responses:
+ *       200:
+ *         description: All Users deleted
+ *       403:
+ *         description: Invalid password
+ *       500:
+ *         description: Server error
+ */
+router.delete("/delete-all", deleteAllUsers);
 
 module.exports = router;

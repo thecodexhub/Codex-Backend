@@ -62,3 +62,29 @@ exports.createOrFindUser = async (req, res) => {
   }
 };
 
+exports.deleteAllUsers = async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    if (password !== "codex") {
+      return res.status(401).json({ success: false, message: "Unauthorized: Invalid password" });
+    }
+
+    await User.deleteMany({});
+    res.status(200).json({ success: true, message: "All users deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json({ success: true, count: users.length, data: users });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+
+
