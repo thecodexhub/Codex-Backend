@@ -24,6 +24,10 @@ app.use("/api/company", companyRoutes);
 
 setupSwagger(app);
 
+app.get('/ping', (req, res) => {
+  res.send(`Ping from ${req.ip} at ${new Date().toISOString()}`);
+});
+
 app.listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`)
 );
