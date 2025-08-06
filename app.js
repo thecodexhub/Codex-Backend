@@ -2,10 +2,13 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors"); // ← Import CORS
 const { connectDB } = require("./config/db");
+
 const authRoutes = require("./routes/auth.routes");
-const storyRoutes = require("./routes/userStory.routes");
+const userProfile = require("./routes/userProfile.routes");
 const interviewExperienceRoutes = require("./routes/interviewExperience.route");
 const companyRoutes = require("./routes/company.routes");
+const pingRoutes = require("./routes/webPing.routes");
+
 const setupSwagger = require("./swagger/swagger");
 
 dotenv.config();
@@ -18,9 +21,10 @@ app.use(cors()); // ← Enable CORS for all routes and origins
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/userStory", storyRoutes);
+app.use("/api/userProfile", userProfile);
 app.use("/api/interviewExperience", interviewExperienceRoutes);
 app.use("/api/company", companyRoutes);
+app.use("/api/ping", pingRoutes);
 
 setupSwagger(app);
 

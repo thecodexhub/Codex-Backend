@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { updateUserStory, createOrFindUser, deleteAllUsers, getAllUsers } = require("../controllers/userStory.controller");
+const { userProfile, createOrFindUser, deleteAllUsers, getAllUsers, getUserById } = require("../controllers/userProfile.controller");
 
 /**
  * @swagger
  * tags:
- *   name: UserStory
- *   description: Endpoints for updating user stories
+ *   name: UserProfile
+ *   description: Endpoints for managing user profiles
  *
  * components:
  *   schemas:
@@ -22,7 +22,7 @@ const { updateUserStory, createOrFindUser, deleteAllUsers, getAllUsers } = requi
  *       type: string
  *       enum: [COMPLETELY_NEW, JUST_STARTING, BASIC_CODING, EXPERIENCED]
 
- *     UpdateUserStory:
+ *     UserProfile:
  *       type: object
  *       properties:
  *         uid:
@@ -42,10 +42,10 @@ const { updateUserStory, createOrFindUser, deleteAllUsers, getAllUsers } = requi
 
 /**
  * @swagger
- * /api/userStory:
+ * /api/userProfile:
  *   post:
  *     summary: Create or find a user by uid and email
- *     tags: [UserStory]
+ *     tags: [UserProfile]
  *     requestBody:
  *       required: true
  *       content:
@@ -83,10 +83,10 @@ router.post("/", createOrFindUser);
 
 /**
  * @swagger
- * /api/userStory/{id}:
+ * /api/userProfile/{id}:
  *   patch:
  *     summary: Update a user story
- *     tags: [UserStory]
+ *     tags: [UserProfile]
  *     parameters:
  *       - in: path
  *         name: id
@@ -99,7 +99,7 @@ router.post("/", createOrFindUser);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateUserStory'
+ *             $ref: '#/components/schemas/UserProfile'
  *     responses:
  *       200:
  *         description: The updated user story
@@ -111,20 +111,20 @@ router.post("/", createOrFindUser);
  *                 success:
  *                   type: boolean
  *                 data:
- *                   $ref: '#/components/schemas/UpdateUserStory'
+ *                   $ref: '#/components/schemas/UserProfile'
  *       404:
  *         description: User not found
  *       500:
  *         description: Server error
  */
-router.patch("/:id", updateUserStory);
+router.patch("/:id", userProfile);
 
 /**
  * @swagger
- * /api/userStory:
+ * /api/userProfile:
  *   get:
  *     summary: Get all users
- *     tags: [UserStory]
+ *     tags: [UserProfile]
  *     responses:
  *       200:
  *         description: List of all users
@@ -140,7 +140,7 @@ router.patch("/:id", updateUserStory);
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/UpdateUserStory'
+ *                     $ref: '#/components/schemas/UserProfile'
  *       500:
  *         description: Server error
  */
@@ -148,10 +148,43 @@ router.get("/", getAllUsers);
 
 /**
  * @swagger
- * /api/userStory/delete-all:
+ * /api/userProfile/{id}:
+ *   get:
+ *     summary: Get user by ID
+ *     tags: [UserProfile]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: MongoDB document ID of the user
+ *     responses:
+ *       200:
+ *         description: User found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/UserProfile'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.get("/:id", getUserById);
+
+/**
+ * @swagger
+ * /api/userProfile/delete-all:
  *   delete:
  *     summary: Delete all Users
- *     tags: [UserStory]
+ *     tags: [UserProfile]
  *     requestBody:
  *       required: true
  *       content:

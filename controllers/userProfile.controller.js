@@ -1,6 +1,6 @@
 const User = require("../models/user.model");
 
-exports.updateUserStory = async (req, res) => {
+exports.userProfile = async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -49,7 +49,12 @@ exports.createOrFindUser = async (req, res) => {
     let user = await User.findOne({ uid, email });
 
     if (user) {
-      return res.status(200).json({ success: true, isNewUser: false, _id: user._id });
+      if( user.year ){
+        return res.status(200).json({ success: true, isNewUser: false, _id: user._id });
+      }
+      else{
+        return res.status(200).json({ success: true, isNewUser: true, _id: user._id });
+      }
     }
 
     user = new User({ uid, email });
@@ -81,6 +86,22 @@ exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json({ success: true, count: users.length, data: users });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+exports.getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, data: user });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
