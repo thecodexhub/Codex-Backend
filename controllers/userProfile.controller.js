@@ -10,6 +10,9 @@ exports.userProfile = async (req, res) => {
       year,
       codingSoFar,
       uid,
+      profilePic,
+      githubUrl,
+      aboutUser,
     } = req.body;
 
     const updatedFields = {};
@@ -20,6 +23,9 @@ exports.userProfile = async (req, res) => {
     if (year) updatedFields.year = year;
     if (codingSoFar) updatedFields.codingSoFar = codingSoFar;
     if (uid) updatedFields.uid = uid;
+    if (profilePic) updatedFields.profilePic = profilePic;
+    if (githubUrl) updatedFields.githubUrl = githubUrl;
+    if (aboutUser) updatedFields.aboutUser = aboutUser;
 
     const updatedUser = await User.findByIdAndUpdate(
       id,
@@ -39,8 +45,7 @@ exports.userProfile = async (req, res) => {
 
 exports.createOrFindUser = async (req, res) => {
   try {
-
-    const { uid, email } = req.body;
+    const { uid, email, profilePic } = req.body;
 
     if (!uid || !email) {
       return res.status(400).json({ success: false, message: "uid and email are required" });
@@ -49,21 +54,39 @@ exports.createOrFindUser = async (req, res) => {
     let user = await User.findOne({ uid, email });
 
     if (user) {
-      if( user.year ){
+      if (user.year) {
         return res.status(200).json({ success: true, isNewUser: false, _id: user._id });
-      }
-      else{
+      } else {
         return res.status(200).json({ success: true, isNewUser: true, _id: user._id });
       }
     }
 
-    user = new User({ uid, email });
+    user = new User({ uid, email, profilePic: profilePic || null });
     await user.save();
 
     return res.status(200).json({ success: true, isNewUser: true, _id: user._id });
-
   } catch (error) {
     return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+exports.updateUserPut = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { $set: req.body },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, data: updatedUser });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 
@@ -106,6 +129,3 @@ exports.getUserById = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
-
-
-

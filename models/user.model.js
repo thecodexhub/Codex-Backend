@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema({
     enum: CodingEnum,
     default: null,
   },
+  profilePic: { type: String, default: null }, // optional
+  githubUrl: { type: String, default: null },  // optional
+  aboutUser: { type: String, default: null },  // optional
 });
 
 module.exports = mongoose.model("User", userSchema);

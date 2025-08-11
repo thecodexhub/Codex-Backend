@@ -1,6 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { userProfile, createOrFindUser, deleteAllUsers, getAllUsers, getUserById } = require("../controllers/userProfile.controller");
+const {
+  userProfile,
+  createOrFindUser,
+  deleteAllUsers,
+  getAllUsers,
+  getUserById,
+  updateUserPut
+} = require("../controllers/userProfile.controller");
 
 /**
  * @swagger
@@ -13,21 +20,25 @@ const { userProfile, createOrFindUser, deleteAllUsers, getAllUsers, getUserById 
  *     DepartmentEnum:
  *       type: string
  *       enum: [COMPUTER, IT, AIDS, CSD, ROBOSTICS, ENTC, OTHER]
-
+ *
  *     YearEnum:
  *       type: string
  *       enum: [FY, SY, TY, LY]
-
+ *
  *     CodingEnum:
  *       type: string
  *       enum: [COMPLETELY_NEW, JUST_STARTING, BASIC_CODING, EXPERIENCED]
-
+ *
  *     UserProfile:
  *       type: object
  *       properties:
  *         uid:
  *           type: string
  *           description: Firebase UID or authentication ID
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
  *         firstName:
  *           type: string
  *         lastName:
@@ -38,6 +49,15 @@ const { userProfile, createOrFindUser, deleteAllUsers, getAllUsers, getUserById 
  *           $ref: '#/components/schemas/YearEnum'
  *         codingSoFar:
  *           $ref: '#/components/schemas/CodingEnum'
+ *         profilePic:
+ *           type: string
+ *           description: URL of the user's profile picture
+ *         githubUrl:
+ *           type: string
+ *           description: GitHub profile link of the user
+ *         aboutUser:
+ *           type: string
+ *           description: Short bio or about section for the user
  */
 
 /**
@@ -60,6 +80,9 @@ const { userProfile, createOrFindUser, deleteAllUsers, getAllUsers, getUserById 
  *                 type: string
  *               email:
  *                 type: string
+ *               profilePic:
+ *                 type: string
+ *                 description: Optional profile picture URL
  *     responses:
  *       200:
  *         description: User found or created
@@ -85,7 +108,46 @@ router.post("/", createOrFindUser);
  * @swagger
  * /api/userProfile/{id}:
  *   patch:
- *     summary: Update a user story
+ *     summary: Partially update a user profile
+ *     tags: [UserProfile]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user MongoDB document ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             allOf:
+ *               - $ref: '#/components/schemas/UserProfile'
+ *     responses:
+ *       200:
+ *         description: The updated user profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/UserProfile'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.patch("/:id", userProfile);
+
+/**
+ * @swagger
+ * /api/userProfile/{id}:
+ *   put:
+ *     summary: Fully update a user profile
  *     tags: [UserProfile]
  *     parameters:
  *       - in: path
@@ -102,7 +164,7 @@ router.post("/", createOrFindUser);
  *             $ref: '#/components/schemas/UserProfile'
  *     responses:
  *       200:
- *         description: The updated user story
+ *         description: The fully updated user profile
  *         content:
  *           application/json:
  *             schema:
@@ -117,7 +179,7 @@ router.post("/", createOrFindUser);
  *       500:
  *         description: Server error
  */
-router.patch("/:id", userProfile);
+router.put("/:id", updateUserPut);
 
 /**
  * @swagger
