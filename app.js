@@ -24,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/userProfile", userProfile);
 app.use("/api/interviewExperience", interviewExperienceRoutes);
 app.use("/api/company", companyRoutes);
+app.use("/api/tasks", require("./routes/task.routes")); // Temporary
 app.use("/api/ping", pingRoutes);
 
 setupSwagger(app);
