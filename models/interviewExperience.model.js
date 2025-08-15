@@ -32,6 +32,7 @@ const InterviewExperienceSchema = new mongoose.Schema({
   rounds: [RoundSchema],
   linkedinUrl: { type: String },
   eligibilityCriteria: { type: String },
+  image: {type: String},
 });
 
 module.exports = interviewDB.model("InterviewExperience", InterviewExperienceSchema);

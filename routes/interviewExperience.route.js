@@ -48,6 +48,8 @@ const {
  *                 type: boolean
  *               internshipPeriodInMonths:
  *                 type: number
+ *               image:
+ *                type: string 
  *               numberOfRounds:
  *                 type: number
  *               ctcOffered:
@@ -180,6 +182,8 @@ router.delete("/delete-all", deleteAllInterviewExperiences);
  *         isInternshipOrTrainingProvided:
  *           type: boolean
  *         internshipPeriodInMonths:
+ *           type: string
+ *         image:
  *           type: string
  *         numberOfRounds:
  *           type: number
