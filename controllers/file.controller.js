@@ -1,36 +1,37 @@
-const path = require("path");
-const fs = require("fs");
+const Image = require('../models/file.model');
 
-// Multer config
-const multer = require("multer");
-const uploadDir = path.join(__dirname, "../uploads");
-
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ storage }).single("file");
-
-// Upload handler
-exports.uploadFile = (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      return res.status(500).json({ message: err.message });
-    }
-    const filePath = `/uploads/${req.file.filename}`; // Relative path for FE
-    return res.status(200).json({
-      message: "File uploaded successfully",
-      fileUrl: filePath
+// Upload image
+exports.uploadImage = async (req, res) => {
+  try {
+    const newImage = new Image({
+      name: req.file.originalname,
+      image: {
+        data: req.file.buffer,
+        contentType: req.file.mimetype
+      }
     });
-  });
+
+    await newImage.save();
+
+    res.status(200).json({
+      message: 'Image uploaded successfully',
+      imageId: newImage._id,
+      imageUrl: newImage.image.data.toString('base64')
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Image upload failed', details: error.message });
+  }
+};
+
+// Get image by ID
+exports.viewImage = async (req, res) => {
+  try {
+    const img = await Image.findById(req.params.id);
+    if (!img) return res.status(404).json({ error: 'Image not found' });
+
+    res.contentType(img.image.contentType);
+    res.send(img.image.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Image fetch failed', details: error.message });
+  }
 };

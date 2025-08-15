@@ -8,6 +8,9 @@ const userProfile = require("./routes/userProfile.routes");
 const interviewExperienceRoutes = require("./routes/interviewExperience.route");
 const companyRoutes = require("./routes/company.routes");
 const pingRoutes = require("./routes/webPing.routes");
+const fileRoutes = require("./routes/file.routes");
+
+const path = require("path");
 
 const setupSwagger = require("./swagger/swagger");
 
@@ -25,6 +28,7 @@ app.use("/api/userProfile", userProfile);
 app.use("/api/interviewExperience", interviewExperienceRoutes);
 app.use("/api/company", companyRoutes);
 app.use("/api/ping", pingRoutes);
+app.use("/api/image", fileRoutes);
 
 setupSwagger(app);
 
