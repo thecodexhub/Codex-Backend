@@ -7,6 +7,7 @@ const authRoutes = require("./routes/auth.routes");
 const userProfile = require("./routes/userProfile.routes");
 const interviewExperienceRoutes = require("./routes/interviewExperience.route");
 const companyRoutes = require("./routes/company.routes");
+const feedbackRoutes = require("./routes/feedback.routes");
 const pingRoutes = require("./routes/webPing.routes");
 const fileRoutes = require("./routes/file.routes");
 
@@ -27,6 +28,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/userProfile", userProfile);
 app.use("/api/interviewExperience", interviewExperienceRoutes);
 app.use("/api/company", companyRoutes);
+app.use("api/feedback", feedbackRoutes);
 app.use("/api/ping", pingRoutes);
 app.use("/api/image", fileRoutes);
 
