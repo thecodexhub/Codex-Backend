@@ -129,3 +129,37 @@ exports.getUserById = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
+exports.getLeaderboard = async (req, res) => {
+  try {
+    // Pagination parameters
+    const page = parseInt(req.query.page) || 1; // default page = 1
+    const limit = parseInt(req.query.limit) || 10; // default limit = 10
+    const skip = (page - 1) * limit;
+
+    // Fetch users with pagination
+    const users = await User.find()
+      .skip(skip)
+      .limit(limit);
+
+    // Format leaderboard data
+    const leaderboard = users.map(user => ({
+      fullName: `${user.name.firstName || ""} ${user.name.lastName || ""}`.trim(),
+      score: 0,
+      avatar: user.profilePic || null,
+      streak: 0,
+    }));
+
+    const totalUsers = await User.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      page,
+      totalPages: Math.ceil(totalUsers / limit),
+      totalUsers,
+      data: leaderboard,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
