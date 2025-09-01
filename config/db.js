@@ -15,13 +15,4 @@ const connectDB = async () => {
   }
 };
 
-// For secondary DB connection
-const createInterviewDBConnection = () => {
-  return mongoose.createConnection(process.env.mongoURI2, {
-    dbName: "interview_db", // give a meaningful DB name
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-};
-
-module.exports = { connectDB, createInterviewDBConnection };
+module.exports = { connectDB };

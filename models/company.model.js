@@ -1,7 +1,4 @@
 const mongoose = require("mongoose");
-const { createInterviewDBConnection } = require("../config/db");
-
-const companyDB = createInterviewDBConnection();
 
 const CompanySchema = new mongoose.Schema({
   name: {
@@ -17,5 +14,4 @@ const CompanySchema = new mongoose.Schema({
   },
 });
 
-const Company = companyDB.model("Company", CompanySchema);
-module.exports = Company;
+module.exports = mongoose.model("Company", CompanySchema);

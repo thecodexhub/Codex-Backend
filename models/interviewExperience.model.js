@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 const { DepartmentEnum } = require("../utils/enum");
-const { createInterviewDBConnection } = require("../config/db");
-
-const interviewDB = createInterviewDBConnection();
 
 const RoundSchema = new mongoose.Schema({
   round_name: { type: String },
@@ -32,7 +29,8 @@ const InterviewExperienceSchema = new mongoose.Schema({
   rounds: [RoundSchema],
   linkedinUrl: { type: String },
   eligibilityCriteria: { type: String },
-  image: {type: String},
+  image: { type: String },
 });
 
-module.exports = interviewDB.model("InterviewExperience", InterviewExperienceSchema);
+// Register model on default mongoose connection
+module.exports = mongoose.model("InterviewExperience", InterviewExperienceSchema);
