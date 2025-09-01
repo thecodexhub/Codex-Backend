@@ -11,6 +11,7 @@ const documentationRoutes = require("./routes/documentation.routes");
 const feedbackRoutes = require("./routes/feedback.routes");
 const pingRoutes = require("./routes/webPing.routes");
 const fileRoutes = require("./routes/file.routes");
+const paymentRoutes = require("./routes/payment.routes");
 
 const path = require("path");
 
@@ -33,6 +34,7 @@ app.use("/api/documentation", documentationRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/ping", pingRoutes);
 app.use("/api/image", fileRoutes);
+app.use("/api/payments", paymentRoutes);
 
 setupSwagger(app);
 

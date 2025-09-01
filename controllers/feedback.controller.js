@@ -34,7 +34,7 @@ exports.getAllFeedback = async (req, res) => {
   try {
     const feedbacks = await Feedback.find()
       .populate("user", "name.firstName name.lastName")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: 1 });
 
     const formatted = feedbacks.map((fb) => ({
       fullName: `${fb.user.name.firstName} ${fb.user.name.lastName}`,
