@@ -64,7 +64,7 @@ exports.updatePaymentStatus = async (req, res) => {
     const { userId, paymentId } = req.params;
     const { paymentStatus } = req.body;
 
-    if (!["NOT_PROCESSED", "VERIFIED"].includes(paymentStatus)) {
+    if (!["NOT_PROCESSED", "IN_VERIFICATION", "VERIFIED", "DONE"].includes(paymentStatus)) {
       return res.status(400).json({ success: false, message: "Invalid status" });
     }
 
