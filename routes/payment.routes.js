@@ -131,7 +131,7 @@ const {
 
 /**
  * @swagger
- * /api/payments/{userId}/:
+ * /api/payments/{userId}:
  *   patch:
  *     summary: Update payment status manually
  *     tags: [CustomPayments]
@@ -215,7 +215,7 @@ const {
 
 router.post("/", createPayment);
 router.get("/user/:userId", getPaymentStatusByUser);
-router.patch("/:userId/:paymentId", updatePaymentStatus);
+router.patch("/:userId", updatePaymentStatus);
 router.delete("/", deleteAllPayments);
 
 module.exports = router;
