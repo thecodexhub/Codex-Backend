@@ -13,7 +13,7 @@ const paymentSchema = new mongoose.Schema({
   screenshotUrl: { type: String, required: true },
   paymentStatus: {
     type: String,
-    enum: ["NOT_PROCESSED", "IN_VERIFICATION", "IN_REVIEW", "VERIFIED"],
+    enum: ["NOT_PROCESSED", "IN_VERIFICATION", "VERIFIED", "DONE"],
     default: "NOT_PROCESSED",
   },
   createdAt: {
