@@ -16,7 +16,7 @@ exports.createPayment = async (req, res) => {
       lastName,
       amount,
       screenshotUrl,
-      paymentStatus: "IN_REVIEW",
+      paymentStatus: "NOT_PROCESSED",
     });
 
     await payment.save();
@@ -64,7 +64,7 @@ exports.updatePaymentStatus = async (req, res) => {
     const { userId, paymentId } = req.params;
     const { paymentStatus } = req.body;
 
-    if (!["IN_REVIEW", "VERIFIED"].includes(paymentStatus)) {
+    if (!["NOT_PROCESSED", "VERIFIED"].includes(paymentStatus)) {
       return res.status(400).json({ success: false, message: "Invalid status" });
     }
 
