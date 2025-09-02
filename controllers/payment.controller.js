@@ -16,7 +16,7 @@ exports.createPayment = async (req, res) => {
       lastName,
       amount,
       screenshotUrl,
-      paymentStatus: "NOT_PROCESSED",
+      paymentStatus: "IN_REVIEW",
     });
 
     await payment.save();

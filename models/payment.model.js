@@ -7,14 +7,14 @@ const paymentSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  firstName: { type: String },
+  lastName: { type: String },
   amount: { type: Number, required: true },
   screenshotUrl: { type: String, required: true },
   paymentStatus: {
     type: String,
     enum: ["NOT_PROCESSED", "IN_VERIFICATION", "IN_REVIEW", "VERIFIED"],
-    default: "IN_REVIEW",
+    default: "NOT_PROCESSED",
   },
   createdAt: {
     type: Date,
