@@ -233,11 +233,35 @@ const {
  *                   example: true
  *                 count:
  *                   type: number
- *                   example: 3
+ *                   example: 1
  *                 payments:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Payment'
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       userId:
+ *                         type: string
+ *                       firstName:
+ *                         type: string
+ *                       lastName:
+ *                         type: string
+ *                       amount:
+ *                         type: number
+ *                         example: 499
+ *                       screenshotUrl:
+ *                         type: string
+ *                       paymentStatus:
+ *                         type: string
+ *                         enum: [NOT_PROCESSED, IN_VERIFICATION, VERIFIED, DONE]
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: 2025-09-08T09:10:47.065Z
+ *                       __v:
+ *                         type: number
+ *                         example: 0
  *       500:
  *         description: Server error
  *
