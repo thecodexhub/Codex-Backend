@@ -6,7 +6,8 @@ const {
   createPayment,
   getPaymentStatusByUser,
   updatePaymentStatus,
-  deleteAllPayments,
+  getAllPayments,
+  deletePaymentById,
 } = require("../controllers/payment.controller");
 
 /**
@@ -189,15 +190,39 @@ const {
  *         description: Server error
  */
 
+// /**
+//  * @swagger
+//  * /api/payments:
+//  *   delete:
+//  *     summary: Delete all payments
+//  *     tags: [CustomPayments]
+//  *     responses:
+//  *       200:
+//  *         description: All payments deleted successfully
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: object
+//  *               properties:
+//  *                 success:
+//  *                   type: boolean
+//  *                   example: true
+//  *                 message:
+//  *                   type: string
+//  *                   example: All payments deleted
+//  *       500:
+//  *         description: Server error
+//  */
+
 /**
  * @swagger
  * /api/payments:
- *   delete:
- *     summary: Delete all payments
+ *   get:
+ *     summary: Get all payments
  *     tags: [CustomPayments]
  *     responses:
  *       200:
- *         description: All payments deleted successfully
+ *         description: List of all payments
  *         content:
  *           application/json:
  *             schema:
@@ -206,9 +231,32 @@ const {
  *                 success:
  *                   type: boolean
  *                   example: true
- *                 message:
- *                   type: string
- *                   example: All payments deleted
+ *                 count:
+ *                   type: number
+ *                   example: 3
+ *                 payments:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Payment'
+ *       500:
+ *         description: Server error
+ *
+ * /api/payments/{paymentId}:
+ *   delete:
+ *     summary: Delete a payment by ID
+ *     tags: [CustomPayments]
+ *     parameters:
+ *       - in: path
+ *         name: paymentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: MongoDB Payment ID
+ *     responses:
+ *       200:
+ *         description: Payment deleted successfully
+ *       404:
+ *         description: Payment not found
  *       500:
  *         description: Server error
  */
@@ -216,6 +264,8 @@ const {
 router.post("/", createPayment);
 router.get("/user/:userId", getPaymentStatusByUser);
 router.patch("/:userId/:paymentId", updatePaymentStatus);
-router.delete("/", deleteAllPayments);
+// router.delete("/", deleteAllPayments);
+router.get("/", getAllPayments);
+router.delete("/:paymentId", deletePaymentById);
 
 module.exports = router;

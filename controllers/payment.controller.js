@@ -97,3 +97,39 @@ exports.deleteAllPayments = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };
+
+// Get all payments (GET)
+exports.getAllPayments = async (req, res) => {
+  try {
+    const payments = await Payment.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: payments.length,
+      payments,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error", error: error.message });
+  }
+};
+
+// Delete payment by ID (DELETE)
+exports.deletePaymentById = async (req, res) => {
+  try {
+    const { paymentId } = req.params;
+
+    const payment = await Payment.findByIdAndDelete(paymentId);
+
+    if (!payment) {
+      return res.status(404).json({ success: false, message: "Payment not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Payment deleted successfully",
+      paymentId: payment._id,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error", error: error.message });
+  }
+};
+
