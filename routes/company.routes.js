@@ -74,6 +74,8 @@ router.get("/search", searchCompanies);
  *                         type: string
  *                       company_logo:
  *                         type: string
+ *                       interviewCount:
+ *                         type: integer
  *                 currentPage:
  *                   type: integer
  *                 totalPages:
