@@ -36,9 +36,31 @@ exports.getDashboard = async (req, res) => {
       ]);
     };
 
+    // Aggregate function to get total count
+    const getTotalCount = async (moduleIds) => {
+      const result = await Progress.aggregate([
+        {
+          $match: {
+            user: new mongoose.Types.ObjectId(user_id),
+            moduleId: { $in: moduleIds },
+            isComplete: true,
+            updatedAt: { $gte: start, $lte: end },
+          },
+        },
+        {
+          $count: "total",
+        },
+      ]);
+      return result.length > 0 ? result[0].total : 0;
+    };
+
     // Fetch both progress sets
     const progProgress = await getProgressCounts(["C1"]);
     const specProgress = await getProgressCounts(["S1", "S2"]);
+
+    // Get total counts
+    const prog_progress_total = await getTotalCount(["C1"]);
+    const specialisation_prog_total = await getTotalCount(["S1", "S2"]);
 
     // Utility → fill all 7 days (even if 0)
     const fillSevenDays = (start, end, progressArr) => {
@@ -64,6 +86,8 @@ exports.getDashboard = async (req, res) => {
       success: true,
       prog_progress,
       specialisation_prog,
+      prog_progress_total,
+      specialisation_prog_total,
     });
   } catch (error) {
     console.error(error);
