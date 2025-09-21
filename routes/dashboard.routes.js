@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { getDashboard } = require("../controllers/dashboard.controller");
 
-
 /**
  * @swagger
  * tags:
@@ -21,6 +20,9 @@ const { getDashboard } = require("../controllers/dashboard.controller");
  *       - **specialisation_prog** → moduleId = "S1" and "S2"
  *
  *       Each array contains 7 entries (one per day).
+ *       Also includes total counts for the given date range:
+ *       - **prog_progress_total** → total count for "C1"
+ *       - **specialisation_prog_total** → combined total for "S1" and "S2"
  *
  *     tags: [Dashboard]
  *     parameters:
@@ -36,17 +38,17 @@ const { getDashboard } = require("../controllers/dashboard.controller");
  *           type: string
  *           format: date
  *         required: true
- *         description: Start date (YYYY-MM-DD) of the 7-day range
+ *         description: Start date (YYYY-MM-DD) of the range
  *       - in: query
  *         name: endDate
  *         schema:
  *           type: string
  *           format: date
  *         required: true
- *         description: End date (YYYY-MM-DD) of the 7-day range
+ *         description: End date (YYYY-MM-DD) of the range
  *     responses:
  *       200:
- *         description: Daily progress for given date range
+ *         description: Daily progress and totals for given date range
  *         content:
  *           application/json:
  *             schema:
@@ -57,7 +59,7 @@ const { getDashboard } = require("../controllers/dashboard.controller");
  *                   example: true
  *                 prog_progress:
  *                   type: array
- *                   description: Completion counts for moduleId "C1"
+ *                   description: Completion counts per day for moduleId "C1"
  *                   items:
  *                     type: object
  *                     properties:
@@ -69,7 +71,7 @@ const { getDashboard } = require("../controllers/dashboard.controller");
  *                         example: 2
  *                 specialisation_prog:
  *                   type: array
- *                   description: Combined completion counts for moduleId "S1" and "S2"
+ *                   description: Combined completion counts per day for moduleId "S1" and "S2"
  *                   items:
  *                     type: object
  *                     properties:
@@ -79,6 +81,26 @@ const { getDashboard } = require("../controllers/dashboard.controller");
  *                       count:
  *                         type: integer
  *                         example: 3
+ *                 prog_progress_total:
+ *                   type: integer
+ *                   description: Total completions for moduleId "C1" within date range
+ *                   example: 12
+ *                 specialisation_prog_total:
+ *                   type: integer
+ *                   description: Total combined completions for moduleId "S1" and "S2" within date range
+ *                   example: 25
+ *             examples:
+ *               sample:
+ *                 value:
+ *                   success: true
+ *                   prog_progress:
+ *                     - day: "2025-08-25"
+ *                       count: 2
+ *                   specialisation_prog:
+ *                     - day: "2025-08-25"
+ *                       count: 3
+ *                   prog_progress_total: 12
+ *                   specialisation_prog_total: 25
  *       400:
  *         description: Missing required params
  *         content:
