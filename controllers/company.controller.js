@@ -84,9 +84,9 @@ const bulkAddCompanies = async (req, res) => {
   });
 };
 
-
 /**
  * @desc Get paginated list of companies with optional search
+ * Sorted by number of interview experiences (desc)
  */
 const getAllCompanies = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -94,16 +94,40 @@ const getAllCompanies = async (req, res) => {
   const skip = (page - 1) * limit;
   const search = req.query.search?.trim();
 
-  const query = search
-    ? { name: { $regex: search, $options: "i" } } // partial case-insensitive match
+  const matchStage = search
+    ? { name: { $regex: search, $options: "i" } }
     : {};
 
   try {
-    const companies = await Company.find(query, "_id name company_logo")
-      .skip(skip)
-      .limit(limit);
+    const companies = await Company.aggregate([
+      { $match: matchStage },
+      {
+        $lookup: {
+          from: "interviewexperiences", // collection name (lowercased + pluralized)
+          localField: "_id",
+          foreignField: "companyId",
+          as: "interviews",
+        },
+      },
+      {
+        $addFields: {
+          interviewCount: { $size: "$interviews" },
+        },
+      },
+      { $sort: { interviewCount: -1 } }, // sort by interviews count
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          company_logo: 1,
+          interviewCount: 1,
+        },
+      },
+    ]);
 
-    const total = await Company.countDocuments(query);
+    const total = await Company.countDocuments(matchStage);
 
     res.status(200).json({
       data: companies,
@@ -112,6 +136,7 @@ const getAllCompanies = async (req, res) => {
       totalCompanies: total,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Failed to fetch companies" });
   }
 };
