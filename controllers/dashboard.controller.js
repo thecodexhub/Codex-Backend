@@ -44,7 +44,6 @@ exports.getDashboard = async (req, res) => {
             user: new mongoose.Types.ObjectId(user_id),
             moduleId: { $in: moduleIds },
             isComplete: true,
-            updatedAt: { $gte: start, $lte: end },
           },
         },
         {
@@ -55,12 +54,12 @@ exports.getDashboard = async (req, res) => {
     };
 
     // Fetch both progress sets
-    const progProgress = await getProgressCounts(["C1"]);
-    const specProgress = await getProgressCounts(["S1", "S2"]);
+    const progProgress = await getProgressCounts(["P1"]);
+    const specProgress = await getProgressCounts(["S1"]);
 
     // Get total counts
-    const prog_progress_total = await getTotalCount(["C1"]);
-    const specialisation_prog_total = await getTotalCount(["S1", "S2"]);
+    const prog_progress_total = await getTotalCount(["P1"]);
+    const specialisation_prog_total = await getTotalCount(["S1"]);
 
     // Utility → fill all 7 days (even if 0)
     const fillSevenDays = (start, end, progressArr) => {
